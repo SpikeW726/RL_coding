@@ -50,15 +50,10 @@ class Offline_Qlearning:
         TD_error = self.Q_stable[s_t0,a_t0] - (r_t1 + self.gamma*self.Q_stable[s_t1].max())
         self.Q_stable[s_t0,a_t0] -= self.alpha*TD_error
 
-    '''此函数根据当前的Q_table来决定在传入的状态下应采取什么行动
-    充当的是policy improvement的作用,但是代码实现中并没有用一个变量来跟踪全程中策略的变化
-    而仅仅是更新Q_table,最终策略也是根据最终Q_table的值来选择的deterministic策略'''
+    '''此函数根据Behavior policy来采取行动生成episode
+    这里采取的Behavior policy就是每个action等概率随机'''
     def take_action(self, state):
-        #if np.random.random() < self.nactions*self.epsilon/(self.nactions-1):
-        if np.random.random() < self.epsilon:
-            action = np.random.randint(self.nactions)
-        else:
-            action = np.argmax(self.Q_stable[state])
+        action = np.random.randint(self.nactions)
         return action
     
     '''此函数用于训练完后打印最终策略'''
@@ -82,8 +77,9 @@ if __name__ == "__main__":
     epsilon = 0.1
     alpha = 0.1
     gamma = 0.9
-    agent = Online_Qlearning(ncol, nrow, alpha, gamma, epsilon)
-    num_episodes = 5000 # 智能体在环境中运行的episode数量
+    # agent = Online_Qlearning(ncol, nrow, alpha, gamma, epsilon)
+    agent = Offline_Qlearning(ncol, nrow, alpha, gamma, epsilon)
+    num_episodes = 100000 # 智能体在环境中运行的episode数量
 
     return_list = [] # 记录每个episode的return
 
