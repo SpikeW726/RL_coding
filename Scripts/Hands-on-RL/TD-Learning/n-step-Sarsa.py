@@ -5,40 +5,6 @@ from tqdm import tqdm
 import os
 from Sarsa import CliffWalkingEnv
 
-# # 问题场景为“悬崖散步”环境:每走一步reward为-1,掉下悬崖reward为-100;求解该环境下的最优策略
-# class CliffWalkingEnv:
-#     def __init__(self, ncol, nrow) -> None:
-#         self.nrow = nrow
-#         self.ncol = ncol
-#         # x,y记录智能体的当前坐标，左上角为原点，初始为(0,ncol-1)，即左下角
-#         self.x = 0
-#         self.y = nrow - 1
-
-#     '''调用此函数来改变智能体位置,输入行动的索引,记录智能体坐标的xy相应改变
-#     然后输出下一状态、本次行动的reward、任务是否结束(到达终点或掉下悬崖)'''
-#     def step(self, action):
-#         # 4种行动：change[0]为向上,change[1]为向下,change[0]为向左,change[0]为向右
-#         change = [[0,-1],[0,1],[-1,0],[1,0]]
-#         # 撞墙位置不动
-#         self.x = min(self.ncol-1, max(0, self.x + change[action][0]))
-#         self.y = min(self.nrow-1, max(0, self.y + change[action][1]))
-#         next_state = self.y*self.ncol + self.x # 已左上角第一个格子为0号,从左至右从上至下依次编号表示智能体在当前状态的位置
-#         reward = -1
-#         done = False
-#         # 判断完成此步行动后任务是否结束;终点设置在右下角,而最下面一行除了起始点后终点都是悬崖外
-#         if self.y == self.nrow-1 and self.x > 0:
-#             done = True
-#             if self.x != self.ncol-1:
-#                 reward = -100
-#             # else: reward = 100
-#         return next_state, reward, done
-    
-#     def reset(self):
-#         self.x = 0
-#         self.y = self.nrow - 1
-#         return self.y*self.ncol + self.x
-    
-
 class n_step_Sarsa:
     def __init__(self, ncol, nrow, nstep, alpha, gamma, epsilon, nactions=4) -> None:
         self.Q_table = np.zeros((nrow*ncol, nactions)) # 创建一个跟踪所有(s,a)pair的q值的表格
@@ -112,9 +78,9 @@ if __name__ == "__main__":
     epsilon = 0.1
     alpha = 0.1
     gamma = 0.9
-    nstep = 5
+    nstep = 7
     agent = n_step_Sarsa(ncol, nrow, nstep, alpha, gamma, epsilon)
-    num_episodes = 500 # 智能体在环境中运行的episode数量
+    num_episodes = 5000 # 智能体在环境中运行的episode数量
 
     return_list = [] # 记录每个episode的return
 
@@ -163,7 +129,6 @@ if __name__ == "__main__":
     #             agent.reward_list = []
 
     for i in range(10):  # 显示10个进度条
-    #tqdm的进度条功能
         with tqdm(total=int(num_episodes / 10), desc='Iteration %d' % i) as pbar:
             for i_episode in range(int(num_episodes / 10)):  # 每个进度条的序列数
                 episode_return = 0
@@ -197,7 +162,7 @@ if __name__ == "__main__":
     plt.title('{}-step Sarsa on {}'.format(nstep,'Cliff Walking'))
     plt.figtext(0.55, 0.95, "n={},ε={},α={},γ={},epi_num={}".format(nstep,epsilon,alpha,gamma,num_episodes),fontsize=10,color='red')
     # plt.show()
-    plt.savefig("F:/王梓恒/学习资料/Machine_Learning/Reinforcement_Learnig/Scripts/Hands-on-RL/TD-Learning/n-step-Sarsa_results/ε={},α={},γ={},epi_num={}.png".format(epsilon,alpha,gamma,num_episodes))
+    plt.savefig("F:/王梓恒/学习资料/Machine_Learning/Reinforcement_Learnig/Scripts/Hands-on-RL/TD-Learning/n-step-Sarsa_results/n={},ε={},α={},γ={},epi_num={}.png".format(nstep,epsilon,alpha,gamma,num_episodes))
 
 
     def print_agent_to_file(agent, env, action_meaning, filename='n-step-Sarsa_results/output.txt', disaster=[], end=[]):
