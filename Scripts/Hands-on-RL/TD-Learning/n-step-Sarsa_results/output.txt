@@ -1,0 +1,18 @@
+在参数n=5,ε=0.1,α=0.1,γ=0.9下运行500个episode, Sarsa算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+^ooo ^ooo ^ooo oo<o ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ovoo 
+ooo> ^ooo ^ooo ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ooo> ovoo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数n=5,ε=0.1,α=0.1,γ=0.9下运行500个episode, Sarsa算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+^ooo ^ooo ^ooo oo<o ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ovoo 
+ooo> ^ooo ^ooo ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ooo> ovoo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数n=5,ε=0.1,α=0.1,γ=0.9下运行500个episode, Sarsa算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+^ooo ^ooo ^ooo oo<o ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ovoo 
+ooo> ^ooo ^ooo ^ooo ^ooo ^ooo ^ooo ooo> ooo> ^ooo ooo> ovoo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
