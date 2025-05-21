@@ -189,6 +189,6 @@ if __name__ == "__main__":
     filename = 'n-step-Sarsa_results/output.txt'
 
     with open(filename, 'a', encoding='utf-8') as f:
-        f.write('在参数n={},ε={},α={},γ={}下运行{}个episode, Sarsa算法最终收敛得到的策略为:\n'.format(nstep,epsilon,alpha,gamma,num_episodes))
+        f.write('在参数n={},ε={},α={},γ={}下运行{}个episode, {}-step Sarsa算法最终收敛得到的策略为:\n'.format(nstep,epsilon,alpha,gamma,num_episodes,nstep))
 
     print_agent_to_file(agent, env, action_meaning, filename, list(range(37, 47)), [47])

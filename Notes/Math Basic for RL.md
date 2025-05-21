@@ -1427,7 +1427,7 @@ $$
 
 1. Q-learning 的 TD target 是 $r_{t+1}+\gamma\max_{a\in\mathcal{A}}q_t(s_{t+1},a)$，Sarsa 的 TD target 是 $r_{t+1}+\gamma q_{t}(s_{t+1},a_{t+1})$ 
 
-2. 在已知 $(s_t,a_t)$ 的条件下，Sarsa 在每次迭代中都需要计算出 $(r_{t+1},s_{t+1},a_{t+1})$，而Q-learning 只需要计算 $(r_{t+1}，s_{t+1})$  
+2. 在已知 $(s_t,a_t)$ 的条件下，Sarsa 在每次迭代中都需要计算出 $(r_{t+1},s_{t+1},a_{t+1})$，而Q-learning 只需要计算 $(r_{t+1}，s_{t+1}) 
 
 Q-learning 在数学上解决的问题是以下 ==**action value 形式的贝尔曼最优方程**==
 $$

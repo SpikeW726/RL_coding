@@ -79,7 +79,7 @@ if __name__ == "__main__":
     gamma = 0.9
     # agent = Online_Qlearning(ncol, nrow, alpha, gamma, epsilon)
     agent = Offline_Qlearning(ncol, nrow, alpha, gamma, epsilon)
-    num_episodes = 100000 # 智能体在环境中运行的episode数量
+    num_episodes = 500 # 智能体在环境中运行的episode数量
 
     return_list = [] # 记录每个episode的return
 
@@ -114,10 +114,10 @@ if __name__ == "__main__":
     plt.plot(episodes_list, return_list)
     plt.xlabel('Episodes')
     plt.ylabel('Returns')
-    plt.title('Q-learning on {}'.format('Cliff Walking'))
+    plt.title('Offline Q-learning on {}'.format('Cliff Walking'))
     plt.figtext(0.6, 0.95, "ε={},α={},γ={},epi_num={}".format(epsilon,alpha,gamma,num_episodes),fontsize=10,color='red')
     # plt.show()
-    plt.savefig("F:/王梓恒/学习资料/Machine_Learning/Reinforcement_Learnig/Scripts/Hands-on-RL/TD-Learning/Q-learning_results/ε={},α={},γ={},epi_num={}.png".format(epsilon,alpha,gamma,num_episodes))
+    plt.savefig("F:/王梓恒/学习资料/Machine_Learning/Reinforcement_Learnig/Scripts/Hands-on-RL/TD-Learning/Q-learning_results/Offline,ε={},α={},γ={},epi_num={}.png".format(epsilon,alpha,gamma,num_episodes))
 
     def print_agent_to_file(agent, env, action_meaning, filename='Q-learning_results/output.txt', disaster=[], end=[]):
         # 自动创建目录（如果不存在）
@@ -143,6 +143,6 @@ if __name__ == "__main__":
     filename = 'Q-learning_results/output.txt'
 
     with open(filename, 'a', encoding='utf-8') as f:
-        f.write('在参数ε={},α={},γ={}下运行{}个episode, Sarsa算法最终收敛得到的策略为:\n'.format(epsilon,alpha,gamma,num_episodes))
+        f.write('在参数ε={},α={},γ={}下运行{}个episode, Q-Learning算法最终收敛得到的策略为:\n'.format(epsilon,alpha,gamma,num_episodes))
 
     print_agent_to_file(agent, env, action_meaning, filename, list(range(37, 47)), [47])
