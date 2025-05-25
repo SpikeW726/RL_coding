@@ -29,7 +29,7 @@ class CliffWalkingEnv:
             done = True
             if self.x != self.ncol-1:
                 reward = -100
-            # else: reward = 100
+            else: reward = 10
         return next_state, reward, done
     
     def reset(self):
@@ -40,15 +40,15 @@ class CliffWalkingEnv:
 class Sarsa:
     '''Sarsa算法'''
     def __init__(self, ncol, nrow, alpha, gamma, epsilon, nactions=4) -> None:
-        self.Q_stable = np.zeros((nrow*ncol, nactions)) # 创建一个跟踪所有(s,a)pair的q值的表格
+        self.Q_table = np.zeros((nrow*ncol, nactions)) # 创建一个跟踪所有(s,a)pair的q值的表格
         self.nactions = nactions
         self.alpha = alpha # 学习率
         self.gamma = gamma # 计算G值(disconted return)时使用的折扣率
         self.epsilon = epsilon # ε-Greedy算法的参数
 
     def update_Q(self, s_t0, a_t0, r_t1, s_t1, a_t1):
-        TD_error = self.Q_stable[s_t0,a_t0] - (r_t1 + self.gamma*self.Q_stable[s_t1, a_t1])
-        self.Q_stable[s_t0,a_t0] = self.Q_stable[s_t0, a_t0] - self.alpha*TD_error
+        TD_error = self.Q_table[s_t0,a_t0] - (r_t1 + self.gamma*self.Q_table[s_t1, a_t1])
+        self.Q_table[s_t0,a_t0] = self.Q_table[s_t0, a_t0] - self.alpha*TD_error
 
     '''此函数根据当前的Q_table来决定在传入的状态下应采取什么行动
     充当的是policy improvement的作用,但是代码实现中并没有用一个变量来跟踪全程中策略的变化
@@ -58,15 +58,15 @@ class Sarsa:
         if np.random.random() < self.epsilon:
             action = np.random.randint(self.nactions)
         else:
-            action = np.argmax(self.Q_stable[state])
+            action = np.argmax(self.Q_table[state])
         return action
     
     '''此函数用于训练完后打印最终策略'''
     def best_action(self,state):
-        Q_max = np.max(self.Q_stable[state])
+        Q_max = np.max(self.Q_table[state])
         a = [0 for _ in  range(self.nactions)]
         for i in range(self.nactions):
-            if self.Q_stable[state,i] == Q_max: # 如果有多个action的q值并列最大也可以记录下来
+            if self.Q_table[state,i] == Q_max: # 如果有多个action的q值并列最大也可以记录下来
                 a[i] = 1
         return a
     

@@ -12,12 +12,6 @@ ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo
 ^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
 
 ------------------------------- Offline ------------------------------------
-在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, Q-Learning算法最终收敛得到的策略为:
-ooo> ooo> ovoo ovoo ovoo ovoo ooo> ovoo ovoo ^oo> ovoo ^ooo 
-ooo> ooo> ooo> ovoo ooo> ooo> ooo> ovoo ovoo ovoo ^ooo ^ooo 
-ooo> ooo> ooo> ooo> oo<o oo<o ooo> ^ooo ooo> ^ooo oo<> ^o<o 
-^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
-
 在参数ε=0.1,α=0.1,γ=0.9下运行5000个episode, Q-Learning算法最终收敛得到的策略为:
 ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ovoo 
 ooo> ooo> ooo> ooo> ooo> ovoo ovoo ovoo ooo> ovoo ovoo ovoo 
@@ -36,4 +30,77 @@ ooo> ooo> ovoo ovoo ooo> ovoo ovoo ovoo ovoo ovoo ovoo ovoo
 ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
 ^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
 
+
+
+在参数ε=0.1,α=0.1,γ=0.9下运行1500个episode, Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ovoo ooo> ooo> ovoo ^ooo ooo> ovoo ovoo 
+ooo> ooo> ooo> ooo> ovoo ooo> ooo> ooo> ^ooo oo<o ^ooo ^ooo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ^ooo oo<o oo<o oo<o ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行2000个episode, Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ovoo ooo> ovoo ooo> ooo> ooo> ^ooo ovoo 
+ooo> ooo> ooo> ooo> ovoo ovoo ooo> ooo> ^ooo ^ooo ovoo ^ooo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> oo<o oo<o oo<o ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行3000个episode, Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ovoo ooo> ooo> ooo> ooo> ^ooo ooo> ovoo ovoo 
+ooo> ooo> ooo> ooo> ooo> ovoo ovoo ooo> ^ooo ovoo ovoo ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> oo<o ooo> oo<o ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, Offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ovoo ovoo ovoo ooo> ooo> ^ooo ooo> ovoo ^ooo 
+ooo> ooo> ooo> ooo> ooo> ovoo ovoo ooo> ovoo ovoo ovoo ^ooo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> oo<o ooo> oo<o ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ovoo ovoo ovoo ovoo ooo> ovoo ovoo ^oo> ovoo ^ooo 
+ooo> ooo> ooo> ovoo ooo> ooo> ooo> ovoo ovoo ovoo ^ooo ^ooo 
+ooo> ooo> ooo> ooo> oo<o oo<o ooo> ^ooo ooo> ^ooo oo<> ^o<o 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行1000个episode, Offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ^ooo ovoo ^ooo oo<o 
+ooo> ooo> ooo> ooo> ooo> ovoo ooo> ooo> ^ooo ovoo ^ooo ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ^ooo oo<o oo<o 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行1000个episode, Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ^ooo ooo> ovoo ^ooo 
+ooo> ooo> ooo> ovoo ovoo ooo> ooo> ovoo ^ooo ovoo ^ooo ^ooo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ^ooo ooo> oo<> oo<> ^o<o 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行1500个episode, Offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ooo> ovoo ooo> 
+ooo> ooo> ooo> ooo> ovoo ovoo ovoo ovoo ovoo ovoo ovoo ooo> 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> oo<o oo<o oo<o ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行3000个episode, Offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ^ooo 
+ooo> ooo> ooo> ovoo ovoo ooo> ooo> ovoo ovoo ^ooo ovoo ooo> 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> oo<o ^ooo ^ooo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, 用300个batch_size为32的epoch训练, offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ovoo 
+ooo> ooo> ooo> ooo> ooo> ovoo ovoo ovoo ooo> ovoo ovoo ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, 用300个batch_size为32的epoch训练, offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ovoo ooo> ovoo ooo> ovoo ovoo ooo> ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+^ooo ^ooo ^ooo ^ooo ^ooo ^ooo ^ooo ooo> ooo> ooo> ooo> ovoo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
+
+在参数ε=0.1,α=0.1,γ=0.9下运行500个episode, 用300个batch_size为32的epoch训练, offline Q-Learning算法最终收敛得到的策略为:
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo ovoo ovoo ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ooo> ovoo 
+^ooo **** **** **** **** **** **** **** **** **** **** EEEE 
 

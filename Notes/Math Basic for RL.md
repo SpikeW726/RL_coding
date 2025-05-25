@@ -917,7 +917,7 @@ The first strategy is, in the policy evaluation step, to **collect all the episo
 
 The second strategy, which can overcome this drawback, is to **use the *return of a* *single episode* to approximate the corresponding action value.** In this way, we can immediately obtain a rough estimate when we receive an episode. Then, the policy can be improved in an episode-by-episode fashion. ==每计算完一个 episode 的 discounted return 就用来粗略估计 action value，并对该状态下的策略进行更新==
 
-<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforce_Learnig\Notes\images\image-20250509103312125.png" alt="image-20250509103312125" style="zoom:80%;" />
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250509103312125.png" alt="image-20250509103312125" style="zoom:80%;" />
 
 MC Exploring Starts 算法需要==从每一个 *state-action pair* **出发的**==足够多的 episode
 
