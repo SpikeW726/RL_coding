@@ -4,8 +4,6 @@
 
 
 
-
-
 <img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20250309225802756.png" alt="image-20250309225802756" style="zoom: 67%;" />
 
 ## Chapter-1 Basic Concepts
@@ -376,7 +374,7 @@ Recall that the state value is given by
 $$
 v_{\pi}(s)=\sum_{a}\pi(a|s)\underbrace{\left[\sum_{r}p(r|s,a)r+\gamma\sum_{s^{\prime}}p(s^{\prime}|s,a)v_{\pi}(s^{\prime})\right]}_{\color{red}q_{\pi}(s,a)}
 $$
-与之前推导的state value表达式比较可得action value的公式：
+与 Bellman equation-Derivation 章节推导的state value表达式比较可得action value的公式：
 $$
 {\color{red}q_\pi(s,a)}=\sum_rp(r|s,a)r+\gamma\sum_{s^{\prime}}p(s^{\prime}|s,a){\color{red}v_\pi(s^{\prime})}\quad(2)
 $$
@@ -388,6 +386,10 @@ $(1)$ and $(2)$ are the 2 sides of the same coin:
 
 ​	$(2)$ shows how to obtain action values from state values
 
+将 state value 形式的贝尔曼方程代入（2）中可以得到 action value 形式的贝尔曼方程：
+$$
+q_\pi(s,a)=\sum_{r\in\mathcal{R}}p(r|s,a)r+\gamma\sum_{s^{\prime}\in\mathcal{S}}p(s^{\prime}|s,a)\sum_{a^{\prime}\in\mathcal{A}(s^{\prime})}\pi(a^{\prime}|s^{\prime})q_\pi(s^{\prime},a^{\prime})
+$$
 Example:
 
 <img src="C:\Users\ASUS\AppData\Roaming\Typora\typora-user-images\image-20250313221509089.png" alt="image-20250313221509089" style="zoom:80%;" />
@@ -995,13 +997,13 @@ $$
 
 ### Robbins-Monro algorithm
 
-Stochasitc approximation 指代的是一大类**用于求解方程或优化问题**的**随机迭代(stochastic iterative)算法**
+Stochasitc approximation 指代的是一大类**用于求解方程或优化问题**的**随机迭代(stochastic iterative)算法**，RM是其中之一
 
-与其他求解方程的算法相比，其优势为==**不需要知道目标方程或其倒数的表达式**==
+与其他求解方程的算法相比，其优势为==**不需要知道目标方程或其导数的表达式**==
 
 #### Problem statement
 
-假设我们要求解方程 $g(w)=0$ 的根，其中 $w\in\mathbb{R}$ 是位置变量，$g:\mathbb{R}\to \mathbb{R}$ 是一个函数
+假设我们要求解方程 $g(w)=0$ 的根，其中 $w\in\mathbb{R}$ 是未知变量，$g:\mathbb{R}\to \mathbb{R}$ 是一个函数
 
 许多问题最终都能转化为这样一个求解方程的问题，比如优化目标函数 $J(w)$ 可以转化为 $g(w)\doteq\nabla_wJ(w)=0$  
 
@@ -1017,7 +1019,7 @@ Stochasitc approximation 指代的是一大类**用于求解方程或优化问�
 $$
 \color{red}w_{k+1}=w_k-a_k\tilde{g}(w_k,\eta_k),\quad k=1,2,3,\ldots
 $$
-其中 $w_k$ 是对于解的第 $k$ 次估计，$\tilde{g}(w_k,\eta_k)=g(w_k)+\eta_k$ 是第 $k$ 次有噪声的观测，$a_k$ 是个正参数
+其中 $w_k$ 是对于解的第 $k$ 次估计，$\tilde{g}(w_k,\eta_k)=g(w_k)+\eta_k$ 是第 $k$ 次有噪声的观测，$a_k$ 是个**正**参数
 
 运作方式为：先初始化一个 $w_1$ 输入黑盒得到输出 $\tilde{g}(w_1,\eta_1)$ , 然后代入上式迭代出 $w_2$ , 再把 $w_2$ 输入黑盒得到 $\tilde{g}(w_2,\eta_2)$ , 再接着迭代......
 
@@ -1108,8 +1110,13 @@ $$
 $$
 我们可以证明 ==**mean estimation 算法也是一种特殊的 SGD 算法**==
 
-用 SGD 解决上述优化问题：$w_{k+1}=w_k-\alpha_k\nabla_wf(w_k,x_k)=w_k-\alpha_k\nabla_w\left(\frac{1}{2}\|w_k-x_k\|^2\right)=w_k-\alpha_k(w_k-x_k)$
-
+用 SGD 解决上述优化问题：
+$$
+\begin{aligned}
+&g(w)=\nabla_w\mathbb{E}[f(w,X)],\ \tilde{g}(w_k,\eta_k)=\nabla_wf(w,x_k)\\
+&w_{k+1}=w_k-\alpha_k\nabla_wf(w_k,x_k)=w_k-\alpha_k\nabla_w\left(\frac{1}{2}\|w_k-x_k\|^2\right)=w_k-\alpha_k(w_k-x_k)
+\end{aligned}
+$$
 发现形式与增量形式的 mean estimation 算法完全一致，因此证明其为**用于解决期望问题**的一种特殊 SGD 算法
 
 #### Convergence analysis
@@ -1176,7 +1183,7 @@ $$
 $$
 \min_w\quad J(w)=\frac{1}{n}\sum_{i=1}^nf(w,x_i)
 $$
-其中 $\{x_i\}_{i=1}^n$ 是一个实数集，$x_i$ 并不是任何随机变量的采样；可以发现这个问题中不涉及任何的随机变量或期望
+其中 $\{x_i\}_{i=1}^n$ 是一个实数集，$x_i$ 并不是任何随机变量的采样；可以发现这个问题中**不涉及任何的随机变量或期望**
 
 解决此问题的 SD 算法为：
 $$
@@ -1231,9 +1238,9 @@ $$
 $$
 其中 $s_t$ 是 $t$ 时刻智能体所处的状态， $v_t(s_t)$ 是对于该状态的 state value $v_\pi(s_t)$ 的估计，这里 TD 算法的目的就是通过迭代使对于各个状态 state value 值的估计越来越准确；$\alpha_t(s_t)$ 是 $t$ 时刻 $s_t$ 的***学习率***
 
-(2)式的含义是，在 $t$ 时刻只有 $s_t$ 的 state value 估计值会改变，其他状态的 state value 估计值不变
+(7.2)式的含义是，在 $t$ 时刻只有 $s_t$ 的 state value 估计值会改变，其他状态的 state value 估计值不变
 
-(1)式中 $v_{t+1}(s_t)$ 是 new estimate，$v_t(s_t)$ 是 current estimate；
+(7.1)式中 $v_{t+1}(s_t)$ 是 new estimate，$v_t(s_t)$ 是 current estimate；
 
 ==**TD 算法可以视作一种用于解贝尔曼方程的特殊 RM 算法**==，下面使用 RM 算法解贝尔曼方程从而导出 TD 算法：
 
@@ -1315,7 +1322,7 @@ $$
 $$
 其中 ==**$q_t(s_t,a_t)$ 是在时刻 $t$ 对于 $q(s_t,a_t)$ 的估计**==
 
-Sarsa 算法其实也是一个**解贝尔曼方程的随机近似算法**：
+Sarsa 算法其实也是一个**解以下贝尔曼方程的RM算法**：
 $$
 q_{\pi}(s,a)=\mathbb{E}\left[R+\gamma q_{\pi}(S^{\prime},A^{\prime})|s,a\right],\quad\forall s,a.
 $$
@@ -1355,7 +1362,7 @@ $$
 
 显然**计算量是增大的**，但是由于不再需要对 $A_{t+1}$ 采样得到 $a_{t+1}$ ，随机变量减少可以使**算法随机性减小**
 
-Expected Sarsa 算法在数学上是一个解以下方程的随机近似算法：
+Expected Sarsa 算法在数学上是一个解以下方程的RM算法：
 $$
 q_{\pi}(s,a)=\mathbb{E}\left[R_{t+1}+\gamma\mathbb{E}[q_{\pi}(S_{t+1},A_{t+1})|S_{t+1}]|S_{t}=s,A_{t}=a\right],\quad\text{for all }s,a.\quad \mathrm{(7.5)}
 $$
@@ -1367,7 +1374,7 @@ $$
 $$
 q_\pi(s,a)=\mathbb{E}\left[R_{t+1}+\gamma v_\pi(S_{t+1})|S_t=s,A_t=a\right]
 $$
-所以 **Expected Sarsa 也是一个解贝尔曼方程的随机近似算法**
+所以 **Expected Sarsa 也是一个解贝尔曼方程的RM算法**
 
 #### n-step Sarsa
 
@@ -1427,13 +1434,13 @@ $$
 
 1. Q-learning 的 TD target 是 $r_{t+1}+\gamma\max_{a\in\mathcal{A}}q_t(s_{t+1},a)$，Sarsa 的 TD target 是 $r_{t+1}+\gamma q_{t}(s_{t+1},a_{t+1})$ 
 
-2. 在已知 $(s_t,a_t)$ 的条件下，Sarsa 在每次迭代中都需要计算出 $(r_{t+1},s_{t+1},a_{t+1})$，而Q-learning 只需要计算 $(r_{t+1}，s_{t+1}) 
+2. 在已知 $(s_t,a_t)$ 的条件下，Sarsa 在每次迭代中都需要计算出 $(r_{t+1},s_{t+1},a_{t+1})$，而Q-learning 只需要计算 $(r_{t+1}，s_{t+1})$
 
 Q-learning 在数学上解决的问题是以下 ==**action value 形式的贝尔曼最优方程**==
 $$
 q(s,a)=\mathbb{E}\left[R_{t+1}+\gamma\max_{a}q(S_{t+1},a)|S_{t}=s,A_{t}=a\right]
 $$
-*为什么上式是一个贝尔曼最优方程，证明参见书P140*
+*为什么上式是一个贝尔曼**最优**方程，证明参见书P140*
 
 #### Off-policy vs. On-policy
 
@@ -1453,7 +1460,7 @@ Off-policy 的优势：
 
 **如何判断一个强化学习算法是 Off-policy 还是 On-policy？** 
 
-==首先看算法解决什么数学问题，然后看算法需要的experience sample 的形式==
+==首先看算法解决什么数学问题，然后看算法需要的 experience sample 的形式==
 
 ***Sarsa —— On-policy***
 
@@ -1497,7 +1504,7 @@ $$
 $$
 q_{t+1}(s_t,a_t)=q_t(s_t,a_t)-\alpha_t(s_t,a_t)\left[q_t(s_t,a_t)-[r_{t+1}+\gamma\max_{a\in\mathcal{A}}q_t(s_{t+1},a)]\right]
 $$
-​	需要的 sample 形式为 $(s_t,a_t,r_{t+1},s_{t+1})$ ，在给定的 $(a_t,s_t)$ 下得到 $r_{t+1},s_{t+1}$ 不依赖于任何策略！
+​	需要的 sample 形式为 $(s_t,a_t,r_{t+1},s_{t+1})$ ，在给定的 $(a_t,s_t)$ 下得到 $r_{t+1},s_{t+1}$ 只依赖于环境而不依赖于任何策略！
 
 ​	因此==**由 $s_t$ 生成 $a_t$ 所依据的 Behavior policy 可以是任何策略**==，可以与 Target policy 相同也可以不同
 
@@ -1530,4 +1537,244 @@ $$
 同样，所有的算法都可以被视作解贝尔曼方程/贝尔曼最优方程的随机近似算法，仅 $R_{t+1}$ 的表达形式不同：
 
 <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250515092320560.png" alt="image-20250515092320560" style="zoom:80%;" />
+
+## Chapter-8 Value Function Approximation
+
+### Motivating-example：Curve Fitting
+
+之前学习的都是 *tabular* ，即用表格记录 state/action values
+
+![image-20250527095215427](F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527095215427.png)
+
+​	这虽然直观，但有两大问题：1. 受存储空间限制，无法解决 (s,a) pair 数量级很大的问题 2. 泛化能力弱，只有访问每一个 (s,a) pair 才能估计它们的值，但数量级很大时无法完全访问
+
+​	**用一个曲线来拟合所有的点，纵轴为 $v_\pi(s)$，横轴为 $s$ , $\pi$ 是已知的**
+
+​	优势在于==**需要存储的数据大大减少**==，比如使用最简单的线性拟合时，只需要存储 $w^T=[a,b]$ 两个参数
+$$
+\hat{v}(s,w)=as+b=\underbrace{[s,1]}_{\phi^T(s)}\underbrace{\begin{bmatrix}a\\b\end{bmatrix}}_{w}=\phi^T(s)w
+$$
+​	$w$ 称为**参数向量**，$\phi(s)$ 称为 $s$ 的**特征向量**；代价是对于值的估计(拟合精度)不够准确，这可以通过提高维数来改善,但相应地，要存储的数据也会随维数增加
+$$
+\hat{v}(s,w)=as^2+bs+c=\underbrace{[s^2,s,1]}_{\phi^T(s)}\underbrace{\begin{bmatrix}a\\b\\c\end{bmatrix}}_{w}=\phi^T(s)w.
+$$
+​	注意这里的估计函数 $\hat{v}(s,w)$ 仍是 $w$ 的线性函数	
+
+​	==**泛化能力**==的直观解释：当我们使用拟合方法来估计各状态的值时，访问一个状态后更新的是权重 $w$ 而不是整个状态的估计值本身，所以其他**未被访问**状态的估计值**也会随着 $w$ 的更新而更新**
+
+### Algorithm for value estimation
+
+#### Objective Function
+
+​	$v_\pi(s)$ 代表 $s$ 的 state value 的真实值，$\hat{v}(s,w)$ 代表其估计值，我们的目标就是**找到最优的 $w$ **让估计值尽可能接近真实值
+
+​	这其实是一个 policy evaluation 问题，即给定策略 $\pi$，尽可能准确地估计其各状态 state value
+
+​	找最优 $w$ 需要两步：1. 定义目标函数  2. 优化目标函数
+
+​	目标函数定义为：
+$$
+J(w)=\mathbb{E}[(v_\pi(S)-\hat{v}(S,w))^2]
+$$
+​	我们的目标就是找到使得目标函数最小化的 $w$ 
+
+​	目标函数中涉及到了随机变量 $S\in\mathcal{S}$，那么其概率分布 probability distribution 是什么样的呢？
+
+1. 平均分布 uniform distribution
+
+   **所有状态都被认为是平等重要**的，即把每一个状态的概率都设为 $1/|\mathcal{S}|$，在此条件下目标函数可化为：
+   $$
+   J(w)=\mathbb{E}[(v_\pi(S)-\hat{v}(S,w))^2]=\frac{1}{|\mathcal{S}|}\sum_{s\in\mathcal{S}}(v_\pi(s)-\hat{v}(s,w))^2
+   $$
+   但问题在于将所有状态视为平等重要显然是不符实际的，应该给那些靠近目标状态的**重要状态更高的权重**，这样子最终对他们 value 的估计误差就更小，而那些不重要状态的估计误差稍大也无所谓
+
+2. 平稳分布 stationary distribution
+
+   平稳分布描述了马尔可夫过程的 long-run behavior，即从一个状态出发，按照一个策略不断地采取 action 与环境交互，这一过程持续很久很久之后会达到一种**平稳状态**，此时可以获知 **agent 在每一个状态出现的概率**是多少
+
+​	用 $\{d_\pi(s)\}_{s\in\mathcal{S}}$ 表示策略 $\pi$ 下的马尔可夫过程平稳分布，根据定义有 $d_\pi(s)\geq0$  和 $\sum{d_\pi(s)}=1,s\in \mathcal{S}$，此时目标函数可化为：
+$$
+J(w)=\mathbb{E}[(v_\pi(S)-\hat{v}(S,w))^2]=\sum_{s\in\mathcal{S}}d_\pi(s)(v_\pi(s)-\hat{v}(s,w))^2
+$$
+​	这是一个加权平方误差；由于访问越频繁的状态 $d_\pi(s)$ 值越大，它们在目标函数中的权重也就越大
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527111353310.png" alt="image-20250527111353310" style="zoom:80%;" />
+
+​	稳态分布定义为==稳定状态时==的概率分布，可以表示为**稳态分布向量与转移矩阵相乘的结果不变**：
+$$
+d_\pi^T=d_\pi^TP_\pi
+$$
+​	这代表稳态分布向量是转移矩阵**对应于特征值1的左特征向量**，所以已知转移矩阵就可以求出稳态分布
+
+#### Optimization algorithm and function selection
+
+​	使用**梯度下降**算法：$w_{k+1}=w_k-\alpha_k\nabla_wJ(w_k)$
+
+​	代入我们上一节推出的平稳分布下的目标函数，可以得到 true gradient：
+$$
+\begin{aligned}\nabla_{w}J(w)&=\nabla_w\mathbb{E}[(v_\pi(S)-\hat{v}(S,w))^2]\\&=\mathbb{E}[\nabla_w(v_\pi(S)-\hat{v}(S,w))^2]\\&=2\mathbb{E}[(v_\pi(S)-\hat{v}(S,w))(-\nabla_w\hat{v}(S,w))]\\&=-2\mathbb{E}[(v_{\pi}(S)-\hat{v}(S,w))\nabla_{w}\hat{v}(S,w)]\end{aligned}
+$$
+​	式中涉及到了梯度的期望，这在不知道随机变量的概率分布时是很难算的，结合目标函数的形式——优化一个期望函数，容易想到前面学习的随机梯度下降算法(SGD)，用 stochastic gradient 替代 true gradient 得到：
+$$
+w_{t+1}=w_t+\alpha_t(v_\pi(s_t)-\hat{v}(s_t,w_t))\nabla_w\hat{v}(s_t,w_t)
+$$
+​	其中 $s_t$ 是随机变量 $S$ 的采样，$2\alpha_k$ 融合为 $\alpha_t$；但这个算法还无法实际使用，因为其中含有我们未知的 state value 真实值 $v_\pi(s_t)$，而我们前面学习了两种使用样本来估计 state value 的方法，蒙特卡洛和TD
+
+1.  使用蒙特卡洛
+
+   $g_t$ 表示从 $s_t$ 出发的一个 episode 的 discounted return，可以用于估计近似 $v_\pi(s_t)$，算法转化为：
+   $$
+   w_{t+1}=w_t+\alpha_t(g_t-\hat{v}(s_t,w_t))\nabla_w\hat{v}(s_t,w_t)
+   $$
+
+2. 使用 TD
+
+   基于 TD Learning 的思想，$r_{t+1}+\gamma\hat{v}(s_{t+1},w_t)$ 作为 TD target 可以被视作对于 $v_\pi(s_t)$ 的估计，算法转化为：
+   $$
+   w_{t+1}=w_t+\alpha_t\left[r_{t+1}+\gamma\hat{v}(s_{t+1},w_t)-\hat{v}(s_t,w_t)\right]\nabla_w\hat{v}(s_t,w_t)
+   $$
+   <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527132015485.png" alt="image-20250527132015485" style="zoom:80%;" />
+
+   linear case 指的是 $\hat{v}(s,w)$ 对于 $w$ 是线性的，可以表示为 $\hat{v}(s,w)=\phi^T(s) w$
+
+#### Selection of function approximators
+
+​	即选择如何选择 $\hat{v}(s,w)$ 的表达式
+
+1. 使用线性函数
+   $$
+   \hat{v}(s,w)=\phi^T(s)w
+   $$
+   其中 $\phi(s)$ 是特征向量，可以选择为基于多项式、基于傅里叶级数等等
+
+2. 使用神经网络
+
+   使用神经网络拟合出来的是 nonlinear function approximator，是一个 $w$ 的**非线性函数**
+
+   <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527133731440.png" alt="image-20250527133731440" style="zoom:80%;" />
+
+#### Illustrative examples and analysis
+
+​	下面这个例子是尝试使用 T-D Linear 方法估计一个给定策略的 state value
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527135749363.png" alt="image-20250527135749363" style="zoom:80%;" />
+
+​	上图展示的是 ground truth，三维图的x-y轴坐标代表每个 state 在方格世界中的位置，z轴代表其 value
+
+![image-20250527135944435](F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527135944435.png)
+
+​	这是使用 tabular TD algorithm 方法的结果，和 ground truth 非常接近
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527140055303.png" alt="image-20250527140055303" style="zoom:80%;" />
+
+​	(a)图的特征向量为三维 $[1,x,y]^T$，对应的结果是平面，即
+$$
+\hat{v}(s,w)=\phi^T(s)w=[1,x,y]\begin{bmatrix}w_1\\w_2\\w_3\end{bmatrix}=w_1+w_2x+w_3y
+$$
+​	(b)图、(c)图的特征向量分别是六维 $[1,x,y,x^2,y^2,xy]^T$ 和十维 $[1,x,y,x^2,y^2,xy,x^3,y^3,x^2y,xy^2]^T$，可以发现随着特征向量维数增多，拟合效果是越来越好的 
+
+​	linear的函数结构导致无法通过不断增加特征向量维度就让拟合误差减小到0，这也是为何现在都用神经网络
+
+#### Summary of the story
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250527140958503.png" alt="image-20250527140958503" style="zoom:80%;" />
+
+### Sarsa with function approximation
+
+$$
+w_{t+1}=w_{t}+\alpha_{t}\left[r_{t+1}+\gamma\hat{q}(s_{t+1},a_{t+1},w_{t})-\hat{q}(s_{t},a_{t},w_{t})\right]\nabla_{w}\hat{q}(s_{t},a_{t},w_{t})
+$$
+
+​	与使用 function approximation 的 TD learning 算法相比只是估计值从 state value 变为了 action value，即 $\hat{v}(s,w)$ 变为了 $\hat{q}(s,a,w)$
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250621003020692.png" alt="image-20250621003020692" style="zoom:80%;" />
+
+### Q-Learning with function approximation
+
+$$
+w_{t+1}=w_{t}+\alpha_{t}\left[r_{t+1}+\gamma\color{red}\max_{a\in\mathcal{A}(s_{t+1})}\color{black}\hat{q}(s_{t+1},a,w_{t})-\hat{q}(s_{t},a_{t},w_{t})\right]\nabla_{w}\hat{q}(s_{t},a_{t},w_{t})
+$$
+
+<img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250621230451548.png" alt="image-20250621230451548" style="zoom:80%;" />
+
+### Deep Q-learning (DQN)
+
+将深度神经网络引入强化学习的最成功算法
+
+Deep Q-learning 的目标是**最小化**下述目标函数（损失函数）：
+$$
+J(w)=\mathbb{E}\left[\left(R+\gamma\max_{a\in\mathcal{A}(S^{\prime})}\hat{q}(S^{\prime},a,w)-\hat{q}(S,A,w)\right)^2\right]
+$$
+​	其中 $(S,A,R,S')$ 是随机变量，如果使用梯度下降法来优化这个函数，计算$\max_{a\in\mathcal{A}(S^{\prime})}\hat{q}(S^{\prime},a,w)$ 的梯度需要一些技巧
+
+​	我们要引入两个神经网络， 一个 **main network** 用来表示 $\hat{q}(s,a,w)$，即根据输入的 $s,a$ 和训练得到的网络参数 $w$ 对 action value 进行估计；一个 **target network** 用来表示 $\hat{q}(s,a,w_T)$，$w_T$ 不像 $w$ 一样是每输入一对 $(s,a)$ 就实时更新的，而是==**认为其在很短的时间内保持不变**==；然后损失函数就转化为：
+$$
+J(w)=\mathbb{E}\left[\left(R+\gamma\max_{a\in\mathcal{A}(S^{\prime})}\color{red}\hat{q}(S^{\prime},a,w_T)\color{black}-\color{blue}\hat{q}(S,A,w)\color{black}\right)^2\right]
+$$
+​	当 $w_T$ 固定不变时，$J$ 的梯度在舍去常系数之后就可以化为：
+$$
+\nabla_wJ=-\mathbb{E}\left[\left(R+\gamma\max_{a\in\mathcal{A}(S^{\prime})}\hat{q}(S^{\prime},a,w_T)-\hat{q}(S,A,w)\right)\nabla_w\hat{q}(S,A,w)\right]
+$$
+​	使用以上梯度表达式来最小化损失函数需要注意以下两个技巧：
+
+1. 如前所述，要使用两个神经网络，它们的参数分别用 $w$和$w_T$ 表示，$w$和$w_T$ 一开始被设置为相同的初始值
+
+   在每次迭代中，要从 *replay buffer* 中抽出一小批样本 $\{(s,a,r,s')\}$ 
+
+   main network 的输入为 $(s,a)$，输出为 $\hat{q}(s,a,w)$
+
+   而输出的目标值定义为 $y_{T}\doteq r+\gamma\max_{a\in\mathcal{A}(s^{\prime})}\hat{q}(s^{\prime},a,w_{T})$ 
+
+   ==训练 main network 就是使用样本 $\{(s,a,y_T)\}$ 来最小化代价函数 $\sum(y-y_T)^2$，相当于把 $y_T$ 当作 label==
+
+   在设定数量的迭代次数中 $w_T$ 保持不变，然后将迭代得到的 $w$ 赋值给 $w_T$，再重复以上过程
+
+2. 经验回放 *experience replay*：我们收集到许多 experience sample，但并不需要按照收集的顺序使用它们
+
+   因此将所有的样本存储在一个集合 $\mathcal{B}\doteq\{(s,a,r,s^{\prime})\}$ 中，称之为 *replay buffer*
+
+   每次训练 main network 的时候就从 $\mathcal{B}$ 中**服从均匀分布**地抽出一小批样本，这个抽取过程就称为 *experience replay*
+
+   为什么在DQN中要使用经验回放，回放过程又为什么一定要服从均匀分布呢？
+
+   观察损失函数 $J=\mathbb{E}\left[\left(R+\gamma\max_{a\in\mathcal{A}(S^{\prime})}\hat{q}(S^{\prime},a,w)-\hat{q}(S,A,w)\right)^2\right]$ 中的随机变量：
+
+   ​        $(S,A)\sim d{:}$ $(S,A)$ 视作一个索引，是一个单随机变量，服从某种分布 $d$
+
+   ​        $R\sim p(R|S,A),S^{\prime}\sim p(S^{\prime}|S,A){:}$ $R$ 和 $S$ 由系统模型决定
+
+   ​        在**没有先验知识**（比如知道哪些状态动作对更重要）的前提下，**要求**$(S,A)$ 必须一视同仁，概率全部相同，满足均匀分布
+
+   ​        尽管在数学上要求 $(S,A)$ 均匀分布，但在采集数据时一定是按照其他的概率分布且有先后顺序的
+
+   ​        因此要使用 *replay buffer* ==**打散所有样本然后从中均匀抽样**==，从而打破样本之间的相关性
+
+   <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250622090933738.png" alt="image-20250622090933738" style="zoom:80%;" />
+
+   #### Illustrative examples
+
+   详细的实验参数设置以及网络架构参见书P184-185
+
+   <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250622092628668.png" alt="image-20250622092628668" style="zoom:80%;" />
+
+   <img src="F:\王梓恒\学习资料\Machine_Learning\Reinforcement_Learnig\Notes\images\image-20250622092707655.png" alt="image-20250622092707655" style="zoom:80%;" />
+
+   ​        一个重要的误区：训练神经网络总是能保证 loss function 收敛，逼近你用来训练它的数据集，==**但收敛不代表最终得到的结果就是正确的**==，这说明再强大的算法也必须要有好的数据
+
+
+## Chapter-9 Policy Gradient Methods
+
+从 value-based 到 policy-based，用**函数**来表达策略，通过优化策略的目标函数直接得到最优策略
+
+### Basic idea of policy gradient
+
+
+
+
+
+
+
+
+
+
 
