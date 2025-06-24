@@ -1721,7 +1721,7 @@ $$
 
    在每次迭代中，要从 *replay buffer* 中抽出一小批样本 $\{(s,a,r,s')\}$ 
 
-   main network 的输入为 $(s,a)$，输出为 $\hat{q}(s,a,w)$
+   main network 的输入为 $(s,a)$，输出为 $y=\hat{q}(s,a,w)$
 
    而输出的目标值定义为 $y_{T}\doteq r+\gamma\max_{a\in\mathcal{A}(s^{\prime})}\hat{q}(s^{\prime},a,w_{T})$ 
 

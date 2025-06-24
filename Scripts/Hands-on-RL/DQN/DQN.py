@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import random
 import gym
 import numpy as np
@@ -8,32 +9,32 @@ import torch.nn.functional as F
 import matplotlib.pyplot as plt
 import rl_utils
 
-# ±¾ÊµÑéµÄ»·¾³ÖĞstateÊÇ4Î¬Á¬ĞøÖµ,actionÊÇ2Î¬ÀëÉ¢Öµ
+# æœ¬å®éªŒçš„ç¯å¢ƒä¸­stateæ˜¯4ç»´è¿ç»­å€¼,actionæ˜¯2ç»´ç¦»æ•£å€¼
 class ReplayBuffer:
-    '''¾­Ñé»Ø·Å³Ø'''
+    '''ç»éªŒå›æ”¾æ± '''
     def __init__(self, capacity):
-        self.buffer = collections.deque(maxlen=capacity) # Ê¹ÓÃ¶ÓÁĞ´æ´¢
+        self.buffer = collections.deque(maxlen=capacity) # ä½¿ç”¨é˜Ÿåˆ—å­˜å‚¨
     
-    def add(self, state, action, reward, next_state, done): # doneµÄº¬ÒåÊÇ£¿
+    def add(self, state, action, reward, next_state, done): # doneçš„å«ä¹‰æ˜¯ï¼Ÿ
         self.buffer.append((state, action, reward, next_state, done))
 
-    def sample(self, batch_size): # ´ÓbufferÖĞ²ÉÑùbatch_size¸öÑù±¾
+    def sample(self, batch_size): # ä»bufferä¸­é‡‡æ ·batch_sizeä¸ªæ ·æœ¬
         transitions = random.sample(self.buffer, batch_size)
-        state, action, reward, next_state, done = zip(*transitions) # Ã¿Ò»¸ö½ÓÊÕ±äÁ¿¶¼ÊÇÒ»¸öÔª×é
+        state, action, reward, next_state, done = zip(*transitions) # æ¯ä¸€ä¸ªæ¥æ”¶å˜é‡éƒ½æ˜¯ä¸€ä¸ªå…ƒç»„
         return np.array(state), action, reward, np.array(next_state), done
     
-    def size(self): # ·µ»ØÄ¿Ç°bufferÖĞÊı¾İµÄÊıÁ¿
+    def size(self): # è¿”å›ç›®å‰bufferä¸­æ•°æ®çš„æ•°é‡
         return len(self.buffer)
     
 class Qnet(torch.nn.Module):
-    '''Ö»ÓĞÒ»²ãÒş²Ø²ãµÄ¼òµ¥Éñ¾­ÍøÂç,main-netºÍtarget-net¶¼ÊÇÕâ¸öÀàµÄÊµÀı'''
-    def __init__(self, state_dim, hidden_dim, action_dim): # ³õÊ¼»¯ĞèÒª×´Ì¬Î¬Êı/Òş²Ø²ãÎ¬Êı/ĞĞ¶¯Î¬Êı
+    '''åªæœ‰ä¸€å±‚éšè—å±‚çš„ç®€å•ç¥ç»ç½‘ç»œ,main-netå’Œtarget-netéƒ½æ˜¯è¿™ä¸ªç±»çš„å®ä¾‹'''
+    def __init__(self, state_dim, hidden_dim, action_dim): # åˆå§‹åŒ–éœ€è¦çŠ¶æ€ç»´æ•°/éšè—å±‚ç»´æ•°/è¡ŒåŠ¨ç»´æ•°
         super(Qnet, self).__init__()
-        self.fc1 = torch.nn.Linear(state_dim, hidden_dim) # fcÖ¸È«Á¬½Ó²ã full-connected
+        self.fc1 = torch.nn.Linear(state_dim, hidden_dim) # fcæŒ‡å…¨è¿æ¥å±‚ full-connected
         self.fc2 = torch.nn.Linear(hidden_dim, action_dim)
 
     def forward(self, x):
-        x = F.relu(self.fc1(x)) # Òş²Ø²ãÊ¹ÓÃReLU¼¤»îº¯Êı,ÒıÈë·ÇÏßĞÔ
+        x = F.relu(self.fc1(x)) # éšè—å±‚ä½¿ç”¨ReLUæ¿€æ´»å‡½æ•°,å¼•å…¥éçº¿æ€§
         return self.fc2(x)
     
 class Online_DQN:
@@ -41,42 +42,115 @@ class Online_DQN:
         self.action_dim = action_dim
         self.main_net = Qnet(state_dim, hidden_dim, self.action_dim).to(device)
         self.target_net = Qnet(state_dim, hidden_dim, self.action_dim).to(device)
-        self.optimizer = torch.optim.Adam(self.main_net.parameters(), lr=learning_rate) # Ê¹ÓÃAdamÓÅ»¯Æ÷(×Ô¶¯µ÷ÕûÑ§Ï°ÂÊ)
+        self.optimizer = torch.optim.Adam(self.main_net.parameters(), lr=learning_rate) # ä½¿ç”¨Adamä¼˜åŒ–å™¨(è‡ªåŠ¨è°ƒæ•´å­¦ä¹ ç‡)
         self.gamma = gamma
         self.epsilon = epsilon
-        self.target_update = target_update # Ä¿±êÍøÂç¸üĞÂÆµÂÊ
-        self.count = 0 # ¼ÆÊıÆ÷,¼ÇÂ¼µü´ú´ÎÊı
+        self.target_update = target_update # ç›®æ ‡ç½‘ç»œæ›´æ–°é¢‘ç‡
+        self.count = 0 # è®¡æ•°å™¨,è®°å½•è¿­ä»£æ¬¡æ•°
         self.device = device
 
     def take_action(self, state):
         if np.random.random() < self.epsilon:
             action = np.random.randint(self.action_dim)
         else:
-            state = torch.tensor([state], dtype=torch.float).to(self.device) # ½«state°ü×°³ÉÒ»¸öÁĞ±íÊÇÎªÁË°ÑÒ»Î¬ÏòÁ¿Êı¾İ×ª»¯Îª¶şÎ¬ÕÅÁ¿
-            action = self.main_net(state).argmax().item() # .argmax()Êä³öµÄÊÇ±êÁ¿ÕÅÁ¿,±íÊ¾×î´óÖµËùÔÚµÄË÷ÒıÎ»ÖÃ,Í¨¹ı.item()×ª»¯ÎªintÀàĞÍ
+            state = torch.tensor(state, dtype=torch.float).unsqueeze(0).to(self.device) # å°†stateåŒ…è£…æˆä¸€ä¸ªåˆ—è¡¨æ˜¯ä¸ºäº†æŠŠä¸€ç»´å‘é‡æ•°æ®è½¬åŒ–ä¸ºäºŒç»´å¼ é‡
+            action = self.main_net(state).argmax().item() # .argmax()è¾“å‡ºçš„æ˜¯æ ‡é‡å¼ é‡,è¡¨ç¤ºæœ€å¤§å€¼æ‰€åœ¨çš„ç´¢å¼•ä½ç½®,é€šè¿‡.item()è½¬åŒ–ä¸ºintç±»å‹
         return action
     
-    def update(self, transition_dict): # transition_dictÊÇ¸ÉÉ¶µÄ£¿
-        '''½øĞĞÒ»´Îµü´ú,¼´¶Ômain-netµÄ²ÎÊı½øĞĞÒ»´Î¸üĞÂ'''
+    def update(self, transition_dict): 
+        '''è¿›è¡Œä¸€æ¬¡è¿­ä»£,å³å¯¹main-netçš„å‚æ•°è¿›è¡Œä¸€æ¬¡æ›´æ–°'''
         states = torch.tensor(transition_dict['states'], dtype=torch.float).to(self.device)
-        actions = torch.tensor(transition_dict['actions']).view(-1,1).to(self.device) # ÕâÀïĞÎ³ÉµÄÕÅÁ¿µÄÔªËØÖµÊÇÔÚÄ³×´Ì¬ÏÂ²ÉÈ¡µÄĞĞ¶¯µÄË÷Òı
+        actions = torch.tensor(transition_dict['actions']).view(-1,1).to(self.device) # è¿™é‡Œå½¢æˆçš„å¼ é‡çš„å…ƒç´ å€¼æ˜¯åœ¨æŸçŠ¶æ€ä¸‹é‡‡å–çš„è¡ŒåŠ¨çš„ç´¢å¼•
         rewards = torch.tensor(transition_dict['rewards'], dtype=torch.float).view(-1,1).to(self.device)                                                                
         next_states = torch.tensor(transition_dict['next_states'], dtype=torch.float).to(self.device)
         dones = torch.tensor(transition_dict['dones'], dtype=torch.float).view(-1,1).to(self.device)                                                                
 
-        q_values = self.main_net(states).gather(1, actions) # ¸ù¾İË÷ÒıÈ¡qÖµ
-        max_next_q_values = self.target_net(next_states).max(1)[0].view(-1,1) # ÏÂÒ»×´Ì¬µÄ×î´óQÖµ
-        q_targets = rewards + self.gamma * max_next_q_values * (1-dones) # (1-dones)ÊÇÉ¶£¿£¿£¿
+        q_values = self.main_net(states).gather(1, actions) # æ ¹æ®ç´¢å¼•å–qå€¼
+        max_next_q_values = self.target_net(next_states).max(1)[0].view(-1,1) # ä¸‹ä¸€çŠ¶æ€çš„æœ€å¤§Qå€¼
+        q_targets = rewards + self.gamma * max_next_q_values * (1-dones) # (1-dones)æ˜¯å•¥ï¼Ÿï¼Ÿï¼Ÿ
 
-        dqn_loss = torch.mean(F.mse_loss(q_values, q_targets))  # ¾ù·½Îó²îËğÊ§º¯Êı;mse_lossº¯Êı·µ»ØÒ»¸ö(batch_size,1)ĞÎ×´µÄÕÅÁ¿,ÆäÖĞÃ¿¸öÔªËØÊÇ¶ÔÓ¦Ñù±¾µÄÆ½·½Îó²î;ÔÙÍ¨¹ımeanº¯ÊıÇó¾ùÖµµÃµ½µÄÊÇ±êÁ¿(ÁãÎ¬ÕÅÁ¿)
-        self.optimizer.zero_grad() # PyTorchÖĞÄ¬ÈÏÌİ¶ÈÊÇÀÛ»ıµÄ,±ØĞëÔÚÃ¿´Î·´Ïò´«²¥Ö®Ç°½«Ìİ¶ÈÇåÁã
-        dqn_loss.backward() # ·´Ïò´«²¥¼ÆËãËğÊ§º¯Êı¶Ô¸÷Ä£ĞÍ²ÎÊıµÄÌİ¶È
-        self.optimizer.step() # ¸ù¾İÉÏÒ»²½¼ÆËãµÄÌİ¶È¸üĞÂÄ£ĞÍ²ÎÊı
+        dqn_loss = torch.mean(F.mse_loss(q_values, q_targets))  # å‡æ–¹è¯¯å·®æŸå¤±å‡½æ•°;mse_losså‡½æ•°è¿”å›ä¸€ä¸ª(batch_size,1)å½¢çŠ¶çš„å¼ é‡,å…¶ä¸­æ¯ä¸ªå…ƒç´ æ˜¯å¯¹åº”æ ·æœ¬çš„å¹³æ–¹è¯¯å·®;å†é€šè¿‡meanå‡½æ•°æ±‚å‡å€¼å¾—åˆ°çš„æ˜¯æ ‡é‡(é›¶ç»´å¼ é‡)
+        self.optimizer.zero_grad() # PyTorchä¸­é»˜è®¤æ¢¯åº¦æ˜¯ç´¯ç§¯çš„,å¿…é¡»åœ¨æ¯æ¬¡åå‘ä¼ æ’­ä¹‹å‰å°†æ¢¯åº¦æ¸…é›¶
+        dqn_loss.backward() # åå‘ä¼ æ’­è®¡ç®—æŸå¤±å‡½æ•°å¯¹å„æ¨¡å‹å‚æ•°çš„æ¢¯åº¦
+        self.optimizer.step() # æ ¹æ®ä¸Šä¸€æ­¥è®¡ç®—çš„æ¢¯åº¦æ›´æ–°æ¨¡å‹å‚æ•°
 
         if self.count % self.target_update == 0:
-            self.target_net.load_state_dict(self.main_net.state_dict())
+            self.target_net.load_state_dict(self.main_net.state_dict()) # æ›´æ–°ç›®æ ‡ç½‘ç»œå‚æ•°
         self.count += 1
 
 
 if __name__ == '__main__':
-    pass
+    lr = 2e-3
+    num_episodes = 1000
+    hidden_dim = 128
+    gamma = 0.98
+    epsilon = 0.01
+    target_update = 10 # target-netçš„æ›´æ–°å‘¨æœŸä¸º10æ¬¡è¿­ä»£
+    buffer_size = 10000
+    minimal_size = 500 # è¿™ä¸ªå˜é‡çš„ä½œç”¨æ˜¯ï¼Ÿ
+    batch_size = 64
+    device = torch.device("cuda")
+
+    env_name = 'CartPole-v1'
+    env = gym.make(env_name)
+    random.seed(0)
+    np.random.seed(0)
+    torch.manual_seed(0)
+    env.action_space.seed(0)
+    env.observation_space.seed(0)
+    replay_buffer = ReplayBuffer(buffer_size)
+    state_dim = env.observation_space.shape[0]
+    action_dim = env.action_space.n
+    Online_DQN_agent = Online_DQN(state_dim, hidden_dim, action_dim, lr, gamma, epsilon, target_update, device)
+
+    return_list = []
+    for i in range(10):
+        with tqdm(total=int(num_episodes / 10), desc='Iteration %d' % i) as pbar:
+            for i_episode in range(int(num_episodes / 10)):
+                episode_return = 0
+                state, _ = env.reset()
+                done = False
+                while not done:
+                    action = Online_DQN_agent.take_action(state)
+                    next_state, reward, terminated, truncated, _ = env.step(action)
+                    done = terminated or truncated
+                    replay_buffer.add(state, action, reward, next_state, done)
+                    state = next_state
+                    episode_return += reward
+
+                    if replay_buffer.size() > minimal_size:
+                        b_s, b_a, b_r, b_ns, b_d = replay_buffer.sample(batch_size)
+                        transition_dict = {
+                            'states': b_s,
+                            'actions': b_a,
+                            'next_states': b_ns,
+                            'rewards': b_r,
+                            'dones': b_d
+                        }
+                        Online_DQN_agent.update(transition_dict)
+                return_list.append(episode_return)
+
+                if (i_episode + 1) % 10 == 0:
+                    pbar.set_postfix({
+                        'episode':
+                        '%d' % (num_episodes / 10 * i + i_episode + 1),
+                        'return':
+                        '%.3f' % np.mean(return_list[-10:])
+                    })
+                pbar.update(1)
+
+    episodes_list = list(range(len(return_list)))
+    plt.plot(episodes_list, return_list, label='Original Returns')
+    plt.xlabel('Episodes')
+    plt.ylabel('Returns')
+    plt.title('DQN on {}'.format(env_name))
+
+    mv_return = rl_utils.moving_average(return_list, 9)
+    plt.plot(episodes_list, mv_return, label='Smoothed Returns (Moving Avg)', color='red')
+    plt.xlabel('Episodes')
+    plt.ylabel('Returns')
+    plt.title('DQN on {}'.format(env_name))
+    plt.legend()
+    plt.show()
+
+
